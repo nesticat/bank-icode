@@ -141,7 +141,7 @@ func handleQuery(request *pb.Request, cell *sdk.Cell) *pb.Response {
 }
 func handleInvoke(request *pb.Request, cell *sdk.Cell) *pb.Response {
 	args := request.GetArgs()
-	fmt.printf("args-0:%s\n", args[0])
+	logger.Debug(nil, "fail parse args: "+args[0])
 	switch request.FunctionName {
 	case "mint":
 		err := cell.PutData("A", []byte("0"))
