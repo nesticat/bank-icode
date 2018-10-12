@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"encoding/json"
 
@@ -76,12 +77,12 @@ func (*HandlerExample) Versions() []string {
 	return vers
 }
 
-func (*HandlerExample) Handle(request *pb.Request, cell *sdk.Cell) *pb.Response {
+func (h *HandlerExample) Handle(request *pb.Request, cell *sdk.Cell) *pb.Response {
 	switch request.Type {
 	case "invoke":
 		return handleInvoke(request, cell)
 	case "query":
-		return handleQuery(request, cell)
+		return handleQuery(request, cell, h.Name())
 	case "test":
 		fmt.Println("req : " + request.Uuid)
 		if request.Uuid == "0" {
@@ -114,16 +115,24 @@ func (*HandlerExample) Handle(request *pb.Request, cell *sdk.Cell) *pb.Response 
 		return responseError(request, err)
 	}
 }
-func handleQuery(request *pb.Request, cell *sdk.Cell) *pb.Response {
+func handleQuery(request *pb.Request, cell *sdk.Cell, prefix string) *pb.Response {
 	args := request.GetArgs()
 	switch request.FunctionName {
 	case "accounts":
 		it := cell.DBHandler.GetIteratorWithPrefix()
+		result := make(map[string]string)
 		for it.First(); it.Valid(); it.Next() {
 			logger.Error(nil, "query - accounts "+string(it.Key())+"/"+string(it.Value()))
+			result[strings.TrimPrefix(string(it.Key()), prefix)] = string(it.Value())
 		}
 
-		return responseSuccess(request, nil)
+		d, err := json.Marshal(result)
+
+		if err != nil {
+			return responseError(request, err)
+		}
+
+		return responseSuccess(request, d)
 	case "balance":
 		b, err := cell.GetData(args[0])
 		logger.Error(nil, "query - balance "+args[0]+"/"+string(b))
