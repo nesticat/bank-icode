@@ -123,7 +123,7 @@ func handleQuery(request *pb.Request, cell *sdk.Cell, prefix string) *pb.Respons
 		result := make(map[string]string)
 		for it.First(); it.Valid(); it.Next() {
 			logger.Error(nil, "query - accounts "+string(it.Key())+"/"+string(it.Value()))
-			result[strings.TrimPrefix(string(it.Key()), prefix)] = string(it.Value())
+			result[strings.TrimPrefix(string(it.Key()), prefix+"_")] = string(it.Value())
 		}
 
 		d, err := json.Marshal(result)
