@@ -115,16 +115,17 @@ func (*HandlerExample) Handle(request *pb.Request, cell *sdk.Cell) *pb.Response 
 	}
 }
 func handleQuery(request *pb.Request, cell *sdk.Cell) *pb.Response {
+	args := request.GetArgs()
 	switch request.FunctionName {
 	case "getbalance":
-		b, err := cell.GetData("A")
+		b, err := cell.GetData(args[0])
 
 		if err != nil {
 			return responseError(request, err)
 		}
 
 		result := make(map[string]string)
-		result["A"] = string(b)
+		result[args[0]] = string(b)
 
 		d, err := json.Marshal(result)
 
@@ -141,31 +142,58 @@ func handleQuery(request *pb.Request, cell *sdk.Cell) *pb.Response {
 }
 func handleInvoke(request *pb.Request, cell *sdk.Cell) *pb.Response {
 	args := request.GetArgs()
-	logger.Error(nil, "fail parse args: "+args[0])
 	switch request.FunctionName {
 	case "mint":
-		err := cell.PutData("A", []byte("0"))
+		err := cell.PutData(args[0], []byte(args[1]))
 		if err != nil {
 			return responseError(request, err)
 		}
 		return responseSuccess(request, nil)
 	case "transfer":
-		data, err := cell.GetData("A")
+		transBalance, err := strconv.Atoi(args[2])
 		if err != nil {
 			return responseError(request, err)
 		}
-		if len(data) == 0 {
+		// get balance 1
+		data1, err := cell.GetData(args[0])
+		if err != nil {
+			return responseError(request, err)
+		}
+		if len(data1) == 0 {
 			err := errors.New("no data err")
 			return responseError(request, err)
 		}
-		strData := string(data)
-		intData, err := strconv.Atoi(strData)
+		strData1 := string(data1)
+		intData1, err := strconv.Atoi(strData1)
 		if err != nil {
 			return responseError(request, err)
 		}
-		intData++
-		changeData := strconv.Itoa(intData)
-		err = cell.PutData("A", []byte(changeData))
+
+		// get balance 2
+		data2, err := cell.GetData(args[1])
+		if err != nil {
+			return responseError(request, err)
+		}
+		if len(data2) == 0 {
+			err := errors.New("no data err")
+			return responseError(request, err)
+		}
+		strData2 := string(data2)
+		intData2, err := strconv.Atoi(strData2)
+		if err != nil {
+			return responseError(request, err)
+		}
+
+		// put 1,2
+		intData1 -= transBalance
+		intData2 += transBalance
+		changeData1 := strconv.Itoa(intData1)
+		err = cell.PutData(args[0], []byte(changeData1))
+		if err != nil {
+			return responseError(request, err)
+		}
+		changeData2 := strconv.Itoa(intData2)
+		err = cell.PutData(args[1], []byte(changeData2))
 		if err != nil {
 			return responseError(request, err)
 		}
