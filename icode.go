@@ -117,9 +117,16 @@ func (*HandlerExample) Handle(request *pb.Request, cell *sdk.Cell) *pb.Response 
 func handleQuery(request *pb.Request, cell *sdk.Cell) *pb.Response {
 	args := request.GetArgs()
 	switch request.FunctionName {
-	case "getbalance":
+	case "accounts":
+		it := cell.DBHandler.GetIteratorWithPrefix()
+		for it.First(); it.Valid(); it.Next() {
+			logger.Error(nil, "query - accounts "+string(it.Key())+"/"+string(it.Value()))
+		}
+
+		return responseSuccess(request, nil)
+	case "balance":
 		b, err := cell.GetData(args[0])
-		logger.Error(nil, "query - getbalance "+args[0]+"/"+string(b))
+		logger.Error(nil, "query - balance "+args[0]+"/"+string(b))
 
 		if err != nil {
 			return responseError(request, err)
