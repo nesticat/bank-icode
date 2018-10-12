@@ -119,6 +119,7 @@ func handleQuery(request *pb.Request, cell *sdk.Cell) *pb.Response {
 	switch request.FunctionName {
 	case "getbalance":
 		b, err := cell.GetData(args[0])
+		logger.Error(nil, "query - getbalance "+args[0]+"/"+string(b))
 
 		if err != nil {
 			return responseError(request, err)
@@ -145,11 +146,13 @@ func handleInvoke(request *pb.Request, cell *sdk.Cell) *pb.Response {
 	switch request.FunctionName {
 	case "mint":
 		err := cell.PutData(args[0], []byte(args[1]))
+		logger.Error(nil, "invoke - mint "+args[0]+"/"+args[1])
 		if err != nil {
 			return responseError(request, err)
 		}
 		return responseSuccess(request, nil)
 	case "transfer":
+		logger.Error(nil, "invoke - transfer "+args[0]+"/"+args[1]+":"+args[2])
 		transBalance, err := strconv.Atoi(args[2])
 		if err != nil {
 			return responseError(request, err)
