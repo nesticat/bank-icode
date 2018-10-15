@@ -1,7 +1,7 @@
 # it-chain ivm 'bank sample'
-# deploy and invoke/query test
+- deploy and invoke/query test
 
-# ivm Log can be checked by 'docker logs -f [docker_name]' command
+- ivm Log can be checked by 'docker logs -f [docker_name]' command
 ```
 [root@sykwon ~]# docker ps --format 'ID:{{.ID}} CMD:{{.Command}} NAME:{{.Names}}'
 ID:6e84078ca76c CMD:"go run /go/src/gi..." NAME:focused_edison
@@ -22,7 +22,7 @@ port : 50002
                \|__|    \|__|               \|_______|\|__|\|__|\|__|\|__|\|__|\|__| \|__|
    ```
 
-1. deploy
+2. deploy
    - run deploy
    ```
    [root@sykwon engine]# it-chain ivm deploy github.com/nesticat/bank-icode
@@ -30,7 +30,7 @@ port : 50002
    INFO[2018-10-15T09:52:19+09:00] [Cmd] This may take a few minutes
    ```
 
-2. invoke mint
+3. invoke mint
    - run invoke mint
    ```
    [root@sykwon engine]# it-chain ivm invoke bank-icode_cfea3fecf8921495dfa3ae975ad175dbebaaa9cd mint sykwon 10000
@@ -48,7 +48,7 @@ port : 50002
    INFO[2018-10-15T01:00:30Z] invoke - mint smoon/10000
    ```
 
-3. invoke transfer
+4. invoke transfer
    - run invoke transfer
    ```
    [root@sykwon engine]# it-chain ivm invoke bank-icode_cfea3fecf8921495dfa3ae975ad175dbebaaa9cd transfer sykwon smoon 1000
@@ -61,7 +61,7 @@ port : 50002
    INFO[2018-10-15T01:03:50Z] invoke - transfer sykwon->smoon:1000
    ```
 
-4. query accounts
+5. query accounts
    - run query accounts
    ```
    [root@sykwon engine]# it-chain ivm query bank-icode_cfea3fecf8921495dfa3ae975ad175dbebaaa9cd accounts
@@ -75,7 +75,7 @@ port : 50002
    INFO[2018-10-15T01:05:59Z] query - accounts sample_sykwon/9000
    ```
 
-5. query balance
+6. query balance
    - run query balance
    ```
    [root@sykwon engine]# it-chain ivm query bank-icode_cfea3fecf8921495dfa3ae975ad175dbebaaa9cd balance sykwon
@@ -93,8 +93,8 @@ port : 50002
    INFO[2018-10-15T01:06:36Z] query - balance smoon:11000
    ```
 
-6. undeploy
-   - run invoke mint
+7. undeploy
+   - run undeploy
    ```
    [root@sykwon engine]# it-chain ivm undeploy bank-icode_cfea3fecf8921495dfa3ae975ad175dbebaaa9cd
    2018/10/15 10:07:03 [bank-icode_cfea3fecf8921495dfa3ae975ad175dbebaaa9cd] icode has undeployed
