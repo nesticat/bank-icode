@@ -51,11 +51,10 @@ port : 50002
 3. invoke transfer
    - run invoke transfer
    ```
-[root@sykwon engine]# it-chain ivm invoke bank-icode_cfea3fecf8921495dfa3ae975ad175dbebaaa9cd transfer sykwon smoon 1000
-INFO[2018-10-15T10:03:49+09:00] [Cmd] Invoke icode - icodeID: [bank-icode_cfea3fecf8921495dfa3ae975ad175dbebaaa9cd]
-INFO[2018-10-15T10:03:49+09:00] [Cmd] Transactions are created - ID: [bf1uete5apve3hejo6c0]
-[root@sykwon engine]#
-
+   [root@sykwon engine]# it-chain ivm invoke bank-icode_cfea3fecf8921495dfa3ae975ad175dbebaaa9cd transfer sykwon smoon 1000
+   INFO[2018-10-15T10:03:49+09:00] [Cmd] Invoke icode - icodeID: [bank-icode_cfea3fecf8921495dfa3ae975ad175dbebaaa9cd]
+   INFO[2018-10-15T10:03:49+09:00] [Cmd] Transactions are created - ID: [bf1uete5apve3hejo6c0]
+   [root@sykwon engine]#
    ```
    - ivm log
    ```
